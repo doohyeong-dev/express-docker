@@ -1,0 +1,22 @@
+mysql/data
+.DS_Store
+
+backend/.DS_Store
+backend/node_modules
+
+# multer upload
+backend/uploads
+
+# Log files
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+backend/pnpm-debug.log*
+
+# Editor directories and files
+backend/.idea
+backend/*.suo
+backend/*.ntvs*
+backend/*.njsproj
+backend/*.sln
+backend/*.sw?

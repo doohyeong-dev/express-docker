@@ -1,0 +1,14 @@
+{
+  "s3": {
+    "accessKeyId": "",
+    "secretAccessKey": "",
+    "region": "",
+    "signatureVersion": "v4"
+  },
+  "ec2": {
+    "accessKeyId": "",
+    "secretAccessKey": "",
+    "region": "",
+    "instanceId": ""
+  }
+}

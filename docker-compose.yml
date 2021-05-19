@@ -1,0 +1,64 @@
+version: "3.1"
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx-container
+    ports:
+      - "8989:3300"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    restart: "unless-stopped"
+    networks:
+      - app-network
+      
+  express:
+    build: src
+    container_name: express-container
+    depends_on:
+      - redis
+    restart: always
+    volumes:
+      - ./src:/usr/src/app
+    links:
+      - mysql
+      - redis
+    command: 
+      - bash
+      - -c
+      - |
+        rm -rf ./node_modules &&
+        npm ci &&
+        npm install -g pm2 &&
+        npm run dev 
+      # npm run start
+    networks:
+      - app-network
+
+  redis:
+    image: redis:alpine
+    container_name: redis-container
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+    
+  mysql:
+    build: mysql
+    container_name: mysql-container
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/conf:/etc/mysql/conf.d
+    restart: always
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: "password"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
